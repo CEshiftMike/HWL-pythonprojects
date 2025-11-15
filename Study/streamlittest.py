@@ -2,19 +2,28 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 
-st.write("Streamlit is working!")
 
-all_users = ["Alice","bob","charlie","david"]
-with st.container(border=True):
-    users = st.multiselect("Select users", options=all_users, default=all_users)
-    rolling_average = st.toggle("Rolling Average")
+st.title("Simple Data Dashboard")
 
-    np.random.seed(42)
-    data = pd.DataFrame(np.random.randn(20, len(users)), columns=users)
-    if rolling_average:
-        data = data.rolling(7).mean().dropna()
+uploadfile = st.file_uploader("Upload a CSV File", type="csv")
 
+if uploadfile is not None:
+    # st.write("File successfully loaded !")
+    df = pd.read_csv(uploadfile)
 
-tab1, tab2 = st.tabs(["Chart","Dataframe"])
-tab1.line_chart(data, height=250)
-tab2.dataframe(data, height=250, use_container_width=True)
+    st.subheader("Data Preview")
+    st.write(df.head())
+
+    st.subheader("Data Summary")
+    st.write(df.describe())
+
+    st.subheader("Filter Data")
+    columns = df.columns.tolist()
+    selected_column = st.selectbox("Select column to filter by",columns)
+
+    distinct = df[selected_column].unique()
+    selected_column = st.selectbox("Select Column to")
+    
+    selected_column = st.selectbox("Select Value", selected_column)
+
+    
